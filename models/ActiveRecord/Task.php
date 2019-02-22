@@ -3,6 +3,7 @@
 namespace app\models\ActiveRecord;
 
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -37,7 +38,13 @@ class Task extends ActiveRecord
             [['description'], 'string'],
             [['responsible_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['responsible_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['responsible_id' => 'id']],
+            [
+                ['responsible_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::class,
+                'targetAttribute' => ['responsible_id' => 'id']
+            ],
         ];
     }
 
@@ -61,5 +68,13 @@ class Task extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'responsible_id']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getUsersList(){
+        $users = User::find()->select(['id', 'second_name'])->asArray()->all();
+        return ArrayHelper::map($users, 'id', 'second_name');
     }
 }

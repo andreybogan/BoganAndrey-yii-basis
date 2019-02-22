@@ -3,6 +3,7 @@
 namespace app\models\ActiveRecord;
 
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "user".
@@ -63,6 +64,9 @@ class User extends ActiveRecord
         return $this->hasMany(Task::class, ['responsible_id' => 'id']);
     }
 
+    /**
+     * @return array|false
+     */
     public function fields()
     {
         if ($this->scenario == self::SCENARIO_AUTH) {
@@ -74,5 +78,14 @@ class User extends ActiveRecord
         }
 
         return parent::fields();
+    }
+
+    /**
+     * @return array
+     */
+    public function getRolesList()
+    {
+        $roles = Role::find()->select(['id', 'name'])->asArray()->all();
+        return ArrayHelper::map($roles, 'id', 'name');
     }
 }
