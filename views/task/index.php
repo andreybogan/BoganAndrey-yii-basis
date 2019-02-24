@@ -7,7 +7,7 @@ use \yii\widgets\ListView;
 /* @var $searchModel app\models\filters\TaskSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tasks';
+$this->title = 'Список задач';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,7 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'itemView' => function ($model) {
             return \app\widgets\TaskCard::widget(['model' => $model]);
         },
-        'summary' => false
+        'summary' => false,
+        'options' => [
+            'class' => 'task-preview-content'
+        ]
     ]); ?>
 
 </div>

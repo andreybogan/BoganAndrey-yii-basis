@@ -1,5 +1,8 @@
 <?php
 /* @var $task  */
+
+$this->title = $task->name;
+//$this->params['breadcrumbs'][] = $task->name;
 ?>
 
 <h1><?= $task->name ?></h1>

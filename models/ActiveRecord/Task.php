@@ -2,7 +2,9 @@
 
 namespace app\models\ActiveRecord;
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
 
@@ -19,6 +21,16 @@ use yii\helpers\ArrayHelper;
  */
 class Task extends ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -73,7 +85,8 @@ class Task extends ActiveRecord
     /**
      * @return array
      */
-    public function getUsersList(){
+    public function getUsersList()
+    {
         $users = User::find()->select(['id', 'second_name'])->asArray()->all();
         return ArrayHelper::map($users, 'id', 'second_name');
     }
