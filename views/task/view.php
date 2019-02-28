@@ -2,7 +2,8 @@
 /* @var $task  */
 
 $this->title = $task->name;
-//$this->params['breadcrumbs'][] = $task->name;
+$this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['/task/index']];
+$this->params['breadcrumbs'][] = $task->name;
 ?>
 
 <h1><?= $task->name ?></h1>

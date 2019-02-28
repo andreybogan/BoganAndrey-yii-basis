@@ -5,16 +5,21 @@ namespace app\controllers;
 use app\models\ActiveRecord\Task;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use Yii;
 
 class TaskController extends Controller
 {
     public function actionIndex()
     {
+        $month = Yii::$app->request->get('month');
+
         $dataProvider = new ActiveDataProvider(
             [
-                'query' => Task::find()->with('user'),
+                'query' => Task::find()
+                    ->with('user')
+                    ->filterWhere(['MONTH(date)' => $month]),
                 'pagination' => [
-                    'pageSize' => 3,
+                    'pageSize' => 8,
                 ]
             ]
         );
@@ -27,9 +32,21 @@ class TaskController extends Controller
     public function actionView($id)
     {
         $task = Task::findOne($id);
-//        $user = $task->user;
-//        var_dump($user); exit;
 
         return $this->render('view', ['task' => $task]);
+    }
+
+    public function actionCreate()
+    {
+        $model = new Task();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+            'responsible' => $model->getUsersList()
+        ]);
     }
 }

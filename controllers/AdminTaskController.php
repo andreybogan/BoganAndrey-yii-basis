@@ -66,22 +66,6 @@ class AdminTaskController extends Controller
     {
         $model = new Task();
 
-        // Создаем событие, которое отправляем письмо пользователю для которого создана новая задача.
-        $model->on(Task::EVENT_AFTER_INSERT, function ($event) {
-            // Получаем задачу из события.
-            $task = $event->sender;
-            // Получаем пользователя.
-            $user = $task->user;
-
-            // Отправляем письмо.
-            Yii::$app->mailer->compose()
-                ->setTo($user->email)
-                ->setFrom("admin@mysite.ru")
-                ->setSubject("Вам назначена новая задача")
-                ->setTextBody("Вам назначена задача: {$task->name}")
-                ->send();
-        });
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
